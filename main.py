@@ -32,3 +32,16 @@ def search_by_ingredient(api_key, ingredient, num_recipes):
     return (recipe_list_by_ingredients)
 
 
+def get_recipe_information(api_key, recipe_id):
+    url = "https://api.spoonacular.com/recipes/{id}/information".format(
+        id=recipe_id)
+    key = f"?apiKey={api_key}"
+
+    complete_url = url + key
+    response = requests.get(complete_url)
+    json_response = response.json()
+    json_formated = json.dumps(json_response, indent=4)
+    # print(json_formated)
+
+    #  returns a json response with the recipe information
+    return json_response

@@ -75,3 +75,20 @@ def get_recipe_ingredients_measurment(api_key, recipe_id):
     # returns a list of dictionaries containing the measurement of the 'recipe_id' ingredients
     return recipe_measurment_information
 
+# returns the time it takes a recipe to be ready
+
+
+def get_recipe_cooking_time(api_key, recipe_id):
+
+    get_recipe_informations = get_recipe_information(api_key, recipe_id)
+    ready_in = get_recipe_informations["readyInMinutes"]
+
+    # print("Ready in: " + str(ready_in) + " minutes")
+    # returns the time it takes a recipe to be ready
+    return ready_in
+
+
+# search_by_ingredient(api_key, "apple,sugar,cinnamon", 4)
+# get_recipe_information(api_key, 660261)
+# get_recipe_ingredients_measurment(api_key, 660261)
+get_recipe_cooking_time(api_key, 660261)

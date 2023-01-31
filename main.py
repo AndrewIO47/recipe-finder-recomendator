@@ -45,3 +45,33 @@ def get_recipe_information(api_key, recipe_id):
 
     #  returns a json response with the recipe information
     return json_response
+
+
+def get_recipe_ingredients_measurment(api_key, recipe_id):
+    url = "https://api.spoonacular.com/recipes/{id}/information".format(
+        id=recipe_id)
+    key = f"?apiKey={api_key}"
+
+    complete_url = url + key
+    response = requests.get(complete_url)
+    json_response = response.json()
+    json_formated = json.dumps(json_response, indent=4)
+
+    recipe_measurment_information = []
+    for item in json_response["extendedIngredients"]:
+
+        item_name = item["nameClean"]
+        measurement = item["measures"]["metric"]
+        measurement_amount = measurement["amount"]
+        measurement_unitShort = measurement["unitShort"]
+
+        recipe_measurment_information.append(
+            {
+                "Item: " + item_name,
+                "Measurement: " + str(measurement_amount) +
+                " " + measurement_unitShort
+            })
+    # print(recipe_measurment_information)
+    # returns a list of dictionaries containing the measurement of the 'recipe_id' ingredients
+    return recipe_measurment_information
+

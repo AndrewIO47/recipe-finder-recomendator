@@ -28,8 +28,10 @@ def search_by_ingredient(api_key, ingredient, num_recipes):
                 "id: " + str(item["id"]),
                 "title: " + item["title"]
             })
+    # print(complete_url)
     # print(recipe_list_by_ingredients)
-    return (recipe_list_by_ingredients)
+    # returns a list of dictionaries with the recipe 'title' and 'id'
+    return (complete_url)
 
 
 def get_recipe_information(api_key, recipe_id):
@@ -75,20 +77,96 @@ def get_recipe_ingredients_measurment(api_key, recipe_id):
     # returns a list of dictionaries containing the measurement of the 'recipe_id' ingredients
     return recipe_measurment_information
 
-# returns the time it takes a recipe to be ready
-
 
 def get_recipe_cooking_time(api_key, recipe_id):
 
     get_recipe_informations = get_recipe_information(api_key, recipe_id)
     ready_in = get_recipe_informations["readyInMinutes"]
 
-    # print("Ready in: " + str(ready_in) + " minutes")
+    print("Ready in: " + str(ready_in) + " minutes")
     # returns the time it takes a recipe to be ready
     return ready_in
 
 
-# search_by_ingredient(api_key, "apple,sugar,cinnamon", 4)
-# get_recipe_information(api_key, 660261)
+def convert_amounts(api_key, ingredient_name, amount, source_unit, target_unit):
+    url = "https://api.spoonacular.com/recipes/convert"
+    key = f"?apiKey={api_key}"
+    ingredient_name = f"&ingredientName={ingredient_name}"
+    amount = f"&sourceAmount={amount}"
+    source_unit = f"&sourceUnit={source_unit}"
+    target_unit = f"&targetUnit={target_unit}"
+
+    complete_url = url + key + ingredient_name + amount + source_unit + target_unit
+    response = requests.get(complete_url)
+    json_response = response.json()
+    json_formated = json.dumps(json_response, indent=4)
+
+    # converts amounts to the specified measuring metric
+    answer = json_response["answer"]
+    print(answer)
+    return answer
+
+
+def search_recipe_by_cuisine(api_key, cuisine, num_recipes):
+    url = "https://api.spoonacular.com/recipes/complexSearch"
+    key = f"?apiKey={api_key}"
+    cuisine = f"&cuisine={cuisine}"
+    number_recipes = f"&number={num_recipes}"
+
+# Searches recipes by cusine and ingredient
+    # uuurl = search_by_ingredient(api_key, "milk", 4)
+    # complete_url = uuurl + cuisine
+
+    complete_url = url + key + cuisine + number_recipes
+    response = requests.get(complete_url)
+    json_response = response.json()
+    json_formated = json.dumps(json_response, indent=4)
+    # print(json_formated)
+
+    recipe_cusine_list = []
+    for recipe in json_response["results"]:
+        title = (recipe["title"])
+        recipe_cusine_list.append(title)
+
+    print(recipe_cusine_list)
+    # returns a list of recipes by "cusine" and "number" of recipes wanted"
+    return recipe_cusine_list
+
+
+def search_by_nutrients(api_key, nutrients_list):
+    url = "https://api.spoonacular.com/recipes/findByNutrients"
+    key = f"?apiKey={api_key}"
+
+# Searches recipes by specific nutrients
+    complete_url = url + key + "&"+nutrients_list
+    response = requests.get(complete_url)
+    json_response = response.json()
+    json_formated = json.dumps(json_response, indent=4)
+    # print(json_formated)
+
+    id_title_kal_prot_fat_carb_list = []
+    for recipe in json_response:
+        id = recipe["id"]
+        title = recipe["title"]
+        calories = recipe["calories"]
+        protein = recipe["protein"]
+        fat = recipe["fat"]
+        carbs = recipe["carbs"]
+
+        id_title_kal_prot_fat_carb_list.append({
+            "id: " + str(id),
+            "title: " + title,
+            "calories: " + str(calories),
+            "protein: " + str(protein),
+            "fat: " + str(fat),
+            "carbs: " + str(carbs)
+        })
+
+    print(id_title_kal_prot_fat_carb_list)
+    # returns a list of of dictionaries with the nutrients of the recipe
+    return id_title_kal_prot_fat_carb_list
+
+
+
 # get_recipe_ingredients_measurment(api_key, 660261)
 get_recipe_cooking_time(api_key, 660261)

@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 response = "*"
 requests = "*"
+chalice = "*"
+black = "*"
 
 [dev-packages]
 

@@ -1,0 +1,1 @@
+# To get the API key, log in into Spoonacular developer website
